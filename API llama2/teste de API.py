@@ -1,34 +1,17 @@
-import requests
+from transformers import T5Tokenizer, T5ForConditionalGeneration
 
-# Substitua pelo seu token Hugging Face
-HUGGING_FACE_API_KEY = "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"
+# Load model and tokenizer
+model_name = "google/flan-t5-base"
+tokenizer = T5Tokenizer.from_pretrained(model_name, legacy=False)
+model = T5ForConditionalGeneration.from_pretrained(model_name)
 
-# URL da API do Llama 2 no Hugging Face (verifique o nome exato do modelo no Hugging Face)
-api_url = "https://api-inference.huggingface.co/models/meta-llama/Llama-2-7b-chat-hf"
+# Define the prompt
+prompt = "Answer this: What is a fruit?"
 
-headers = {
-    "Authorization": f"Bearer {HUGGING_FACE_API_KEY}"
-}
+# Tokenize and generate output
+inputs = tokenizer(prompt, return_tensors="pt")
+outputs = model.generate(inputs.input_ids, max_length=50000)
 
-def perguntar_llama2(pergunta):
-    payload = {
-        "inputs": pergunta,
-        "parameters": {
-            "temperature": 0.5,
-            "max_new_tokens": 50
-        }
-    }
-    
-    response = requests.post(api_url, headers=headers, json=payload)
-    
-    if response.status_code == 200:
-        resposta = response.json()
-        return resposta[0]['generated_text']
-    else:
-        print(f"Erro {response.status_code}: {response.text}")
-        return None
-
-# Exemplo de uso
-pergunta = "Qual é a capital da França?"
-resposta = perguntar_llama2(pergunta)
-print("Resposta:", resposta)
+# Decode and print the answer
+answer = tokenizer.decode(outputs[0], skip_special_tokens=True)
+print("Answer:", answer)
