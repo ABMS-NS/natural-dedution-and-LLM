@@ -1,0 +1,7 @@
+requests
+PyQt5
+graphviz
+fastapi
+uvicorn
+pydantic
+python-dotenv
