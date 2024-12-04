@@ -167,6 +167,8 @@ Este projeto é licenciado sob a licença MIT - veja o arquivo [LICENSE](LICENSE
 * Jean Felipe Duarte Tenório
 * Alison
 * Rian
+* Gustavo Romain Batista Carvalho
+* 
 
 
                 
