@@ -168,7 +168,8 @@ Este projeto é licenciado sob a licença MIT - veja o arquivo [LICENSE](LICENSE
 * Alison
 * Rian
 * Gustavo Romain Batista Carvalho
-* 
+* Kalleb Felipe Melo de Oliveira
+  
 
 
                 
