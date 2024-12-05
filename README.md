@@ -165,8 +165,8 @@ Este projeto é licenciado sob a licença MIT - veja o arquivo [LICENSE](LICENSE
 ## Equipe
 
 * Jean Felipe Duarte Tenório
-* Alison
-* Rian
+* Alison Bruno Martires Soares
+* Rian Rian Américo Brito da Silva
 * Gustavo Romain Batista Carvalho
 * Kalleb Felipe Melo de Oliveira
   
