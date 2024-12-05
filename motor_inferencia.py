@@ -953,37 +953,33 @@ def validar_condicional(passo, conteudo, passos_dict, feedback):
 
 
 def gerar_grafo(passos_dict, relacoes, premissas):
-    """
-    Gera um grafo com os passos da dedução e as relações entre eles.
-    """
+    """Gera um grafo com os passos da dedução e as relações entre eles."""
     if not os.path.exists("grafos"):
         os.makedirs("grafos")
 
     dot = Digraph(format="svg")
     dot.attr(rankdir="LR")
-    dot.attr("node", shape = "box", style ="rounded,filled", fillcolor = "lightgrey")
-    dot.attr("edge", arrowsize = "0.8", fontsize = "10")
+    dot.attr("node", shape="box", style="rounded,filled", fillcolor="lightgrey")
+    dot.attr("edge", arrowsize="0.8", fontsize="10")
+
     # Adicionar nós
     for numero, conteudo in passos_dict.items():
-        if "(Hipótese)" in conteudo:
-            proposicao = extrair_conclusao(conteudo.replace("(Hipótese)", "").strip())
-            print(f"Passo {numero}, Proposição extraída: '{proposicao}'")
-            if any(proposicoes_iguais(proposicao, premissa) for premissa in premissas):
-                cor_no = "lightgreen"
-            else:
-                cor_no = "lightcoral"
-        else:   
-            valido_passo = any(passo == numero and valido for referencias, passo , regra,valido in relacoes)
+        if "(Hipótese)" in conteudo or conteudo.endswith("(Hip-RAA)") or conteudo.endswith("(Hip-PC)"):
+            cor_no = "lightgreen"  # Hipóteses, Hip-RAA e Hip-PC sempre verdes
+        elif "RAA" in conteudo or "PC" in conteudo:
+            valido_passo = any(passo == numero and valido for referencias, passo, regra, valido in relacoes if regra in ("RAA", "PC"))
             cor_no = "lightgreen" if valido_passo else "lightcoral"
-        
-        
-        dot.node(numero, f"{numero}: {conteudo}", fillcolor = cor_no)
-        
+        else:
+            valido_passo = any(passo == numero and valido for referencias, passo, regra, valido in relacoes)
+            cor_no = "lightgreen" if valido_passo else "lightcoral"
+
+        dot.node(numero, f"{numero}: {conteudo}", fillcolor=cor_no)
+
     # Adicionar arestas
     for referencias, passo, regra, valido in relacoes:
         cor_aresta = "green" if valido else "red"
         for ref in referencias:
-            dot.edge(ref, passo, label=f"{regra} {'(OK)' if valido else '(Erro)'}", color=cor_aresta, fontcolor = cor_aresta)
+            dot.edge(ref, passo, label=f"{regra} {'(OK)' if valido else '(Erro)'}", color=cor_aresta, fontcolor=cor_aresta)
 
     caminho_grafo = os.path.join("grafos", "grafo_deducao")
     dot.render(caminho_grafo, format="svg", cleanup=True)
